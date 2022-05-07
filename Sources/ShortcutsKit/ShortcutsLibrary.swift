@@ -14,23 +14,25 @@ public final class ShortcutsLibrary {
         return SBApplication(bundleIdentifier: "com.apple.Shortcuts") != nil
     }
     
-    private let application: ShortcutApplication
-    private let eventsApplication: ShortcutApplication
+    private let application: SBApplication
     
     private init() {
-        self.application = ShortcutApplication(SBApplication(bundleIdentifier: "com.apple.Shortcuts")!)
-        self.eventsApplication = ShortcutApplication(SBApplication(bundleIdentifier: "com.apple.shortcuts.events")!)
+        self.application = SBApplication(bundleIdentifier: "com.apple.Shortcuts")!
     }
     
-    public var shortcuts: [Shortcut] { application.shortcuts }
+    public var shortcuts: [Shortcut] {
+        guard let array = application.value(forKey: "shortcuts") as? SBElementArray else { return [] }
+        return array.map { object in Shortcut(object as! SBObject) }
+    }
     
-    public var folders: [ShortcutFolder] { application.folders }
+    public var folders: [ShortcutFolder] {
+        guard let elementArray = application.value(forKey: "folders") as? SBElementArray else { return [] }
+        return elementArray.map { object in ShortcutFolder(object as! SBObject) }
+    }
     
-    public func shortcut(withID id: String) -> Shortcut? { application.shortcut(withID: id) }
-    
-    func run(_ shortcut: Shortcut, inBackground: Bool) {
-        let app = inBackground ? eventsApplication : application
-        guard let target = app.shortcut(withID: shortcut.id) else { fatalError() }
-        target.run()
+    public func shortcut(withID id: String) -> Shortcut? {
+        guard let elementArray = application.value(forKey: "shortcuts") as? SBElementArray else { return nil }
+        guard let object = elementArray.object(withID: id) as? SBObject else { return nil }
+        return Shortcut(object)
     }
 }

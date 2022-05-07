@@ -55,8 +55,13 @@ public struct Shortcut {
         return ShortcutFolder(object)
     }
     
-    public func run(inBackground: Bool = false) {
-        object.perform(#selector(ShortcutActions.runWithInput(_:)), with: nil)
+    public func run() async {
+        await withUnsafeContinuation { (continuation: UnsafeContinuation<Void, Never>) in
+            DispatchQueue.global(qos: .background).async {
+                object.perform(#selector(ShortcutActions.runWithInput(_:)), with: nil)
+                continuation.resume(returning: ())
+            }
+        }
     }
 }
 
