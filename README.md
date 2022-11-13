@@ -1,3 +1,3 @@
 # ShortcutsKit
 
-A description of this package.
+A Swift interface for invoking Shortcuts.
