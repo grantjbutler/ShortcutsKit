@@ -11,13 +11,13 @@ public final class ShortcutsLibrary {
     public static let `default` = ShortcutsLibrary()
     
     public static var hasShortcutsLibrary: Bool {
-        return SBApplication(bundleIdentifier: "com.apple.Shortcuts") != nil
+        return SBApplication(bundleIdentifier: "com.apple.shortcuts.events") != nil
     }
     
     private let application: SBApplication
     
     private init() {
-        self.application = SBApplication(bundleIdentifier: "com.apple.Shortcuts")!
+        self.application = SBApplication(bundleIdentifier: "com.apple.shortcuts.events")!
     }
     
     public var shortcuts: [Shortcut] {
