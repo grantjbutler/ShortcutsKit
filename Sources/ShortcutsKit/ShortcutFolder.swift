@@ -23,7 +23,7 @@ public struct ShortcutFolder {
     }
     
     public var shortcuts: [Shortcut] {
-        guard let elementArray = object.value(forKey: "shortcutes") as? SBElementArray else { return [] }
+        guard let elementArray = object.value(forKey: "shortcuts") as? SBElementArray else { return [] }
         return elementArray.map { object in Shortcut(object as! SBObject) }
     }
 }
